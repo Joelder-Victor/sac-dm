@@ -22,7 +22,7 @@ ser.reset_input_buffer()
 sensor_buffer = []
 toSend = []
 send_flag = 0
-len_buffer = 2000
+len_buffer = 384
 disconnected_flag = 0 # 1 if previously disconnected then reconnect to wifi, 0 if not
 
 log_lock = Lock()
