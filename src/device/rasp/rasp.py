@@ -22,7 +22,7 @@ ser.reset_input_buffer()
 sensor_buffer = []
 toSend = []
 send_flag = 0
-
+len_buffer = 1000
 disconnected_flag = 0 # 1 if previously disconnected then reconnect to wifi, 0 if not
 
 log_lock = Lock()
@@ -100,13 +100,13 @@ def read_serial():
 		
 		esp_serial = str(ser.readline())
 		sensor_buffer.append(esp_serial[2:][:-5] + ';'+ str(time.time_ns()*1000000))
-		print(esp_serial)
+		#print(esp_serial)
 
-		if len(sensor_buffer) %10000 == 0:
+		if len(sensor_buffer) %len_buffer == 0:
 			print(sensor_buffer[-1])
 			print(len(sensor_buffer))
 			
-		if len(sensor_buffer) >= 10000:
+		if len(sensor_buffer) >= len_buffer:
 			
 			print(time.time()-start)
 			
