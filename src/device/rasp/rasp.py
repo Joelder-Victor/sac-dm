@@ -53,7 +53,7 @@ def write_log(data, lock):
 
 def read_log_send(lock):
 	sendHttp = []
-
+	print('enviado o log')
 	with lock:
 		log = open("log.txt", "r")
 		lines = log.readlines()
