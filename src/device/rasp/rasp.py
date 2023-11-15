@@ -121,6 +121,7 @@ def send_buffer():
 	global http_lock
 	global log_lock
 	global disconnected_flag
+	global send_flag
 	while  True:
 		if send_flag:
 			if(check_connection()):
