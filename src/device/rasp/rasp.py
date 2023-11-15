@@ -101,6 +101,7 @@ def read_serial():
 		esp_serial = str(ser.readline())
 		sensor_buffer.append(esp_serial[2:][:-5] + ';'+ str(time.time_ns()*1000000))
 		print(esp_serial)
+
 		if len(sensor_buffer) %10000 == 0:
 			print(sensor_buffer[-1])
 			print(len(sensor_buffer))
@@ -148,7 +149,7 @@ def main():
 	print('Threads iniciadas')
 	
 	while True:
-		time.sleep(1)
+		continue
 
 if __name__ == "__main__":
 	main()
