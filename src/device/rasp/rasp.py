@@ -141,15 +141,15 @@ def send_buffer():
 
 def main():
 	t_main = Thread(target=read_serial)
-	t_main.start
+	t_main.start()
 	t_send = Thread(target=send_buffer)
-	t_send.start
+	t_send.start()
 	
-	print('Thrads iniciadas')
+	print('Threads iniciadas')
 	
 	while True:
-		continue
-				
+		time.sleep(1)
+
 if __name__ == "__main__":
 	main()
 
