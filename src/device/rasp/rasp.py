@@ -90,7 +90,7 @@ http_lock = Lock()
 
 def read_serial():
 	esp_serial = str(ser.readline())
-
+	disconnected_flag = 0
 	while True:
 		
 		start=time.time()	
