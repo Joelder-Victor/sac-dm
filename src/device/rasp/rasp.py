@@ -7,6 +7,27 @@ import json as JSON
 from threading import Thread
 from threading import Lock
 
+
+
+
+########################### GLOBAL VAR #################################
+
+
+
+#url = 'https://enmpf6xid68v.x.pipedream.net/'
+#url = 'http://150.165.167.12:8100/accelerometer/'
+url = 'http://192.168.0.7:8000/accelerometer/'
+ser = serial.Serial("/dev/ttyAMA0", 115200)
+ser.reset_input_buffer()
+sensor_buffer = []
+toSend = []
+send_flag = 0
+
+disconnected_flag = 0 # 1 if previously disconnected then reconnect to wifi, 0 if not
+
+log_lock = Lock()
+http_lock = Lock()
+
 ############################ SEND HTTP #################################
 
 def convertData(d):
@@ -64,33 +85,15 @@ def read_log_send(lock):
 			log = open("log.txt", "w")
 			log.close()
 			sendHttp.clear()
-	
-		
-		
-	
-########################### GLOBAL VAR #################################
-
-
-
-#url = 'https://enmpf6xid68v.x.pipedream.net/'
-#url = 'http://150.165.167.12:8100/accelerometer/'
-url = 'http://192.168.0.7:8000/accelerometer/'
-ser = serial.Serial("/dev/ttyAMA0", 115200)
-ser.reset_input_buffer()
-sensor_buffer = []
-toSend = []
-
-disconnected_flag = 0 # 1 if previously disconnected then reconnect to wifi, 0 if not
-
-log_lock = Lock()
-http_lock = Lock()
+			
 
 ############################ MAIN CODE #################################
 
 
 def read_serial():
+	global send_flag
+	global toSend
 	esp_serial = str(ser.readline())
-	disconnected_flag = 0
 	while True:
 		
 		start=time.time()	
@@ -110,30 +113,37 @@ def read_serial():
 			print(sensor_buffer[0])
 			
 			toSend = sensor_buffer.copy()
+			send_flag = True
 
+def send_buffer():
+	global toSend
+	global http_lock
+	global log_lock
+	global disconnected_flag
+	while  True:
+		if send_flag:
 			if(check_connection()):
-				
 				if(disconnected_flag):
 					read_log_send()
 				
 				print("online")
 				t_http = Thread(target=sendJSONhttp, args=(toSend, http_lock))
 				t_http.start()
-				sensor_buffer.clear()		
-				
-						
+				sensor_buffer.clear()				
 			else:
-				
 				disconnected_flag = 1
 				print("offline")
 				t_log = Thread(target=write_log, args=(toSend, log_lock,))
 				t_log.start()
 				sensor_buffer.clear()
-			
-		#break;
+		
+		
 
 def main():
-	read_serial()
+	t_main = Thread(target=read_serial)
+	t_main.start
+	t_send = Thread(target=send_buffer)
+	t_send.start
 				
 if __name__ == "__main__":
 	main()
