@@ -22,7 +22,7 @@ ser.reset_input_buffer()
 sensor_buffer = []
 toSend = []
 send_flag = 0
-len_buffer = 10000
+len_buffer = 2000
 disconnected_flag = 0 # 1 if previously disconnected then reconnect to wifi, 0 if not
 
 log_lock = Lock()
@@ -130,7 +130,8 @@ def send_buffer():
 				print("online")
 				t_http = Thread(target=sendJSONhttp, args=(toSend, http_lock))
 				t_http.start()
-				sensor_buffer.clear()				
+				sensor_buffer.clear()	
+				send_flag = False			
 			else:
 				disconnected_flag = 1
 				print("offline")
