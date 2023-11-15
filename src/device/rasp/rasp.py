@@ -93,6 +93,7 @@ def read_log_send(lock):
 def read_serial():
 	global send_flag
 	global toSend
+	global sensor_buffer
 	esp_serial = str(ser.readline())
 	while True:
 		
@@ -115,6 +116,7 @@ def read_serial():
 			
 			toSend = sensor_buffer.copy()
 			send_flag = True
+			sensor_buffer.clear()
 
 def send_buffer():
 	global toSend
@@ -131,7 +133,7 @@ def send_buffer():
 				print("online")
 				t_http = Thread(target=sendJSONhttp, args=(toSend, http_lock))
 				t_http.start()
-				sensor_buffer.clear()	
+				#sensor_buffer.clear()	
 				send_flag = False			
 			else:
 				disconnected_flag = 1
