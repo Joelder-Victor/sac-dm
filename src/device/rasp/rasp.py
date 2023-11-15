@@ -144,6 +144,11 @@ def main():
 	t_main.start
 	t_send = Thread(target=send_buffer)
 	t_send.start
+	
+	print('Thrads iniciadas')
+	
+	while True:
+		continue
 				
 if __name__ == "__main__":
 	main()
