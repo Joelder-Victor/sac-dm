@@ -74,7 +74,7 @@ def read_log_send(lock):
 
 #url = 'https://enmpf6xid68v.x.pipedream.net/'
 #url = 'http://150.165.167.12:8100/accelerometer/'
-url = 'http://198.168.0.7:8000/accelerometer/'
+url = 'http://192.168.0.7:8000/accelerometer/'
 ser = serial.Serial("/dev/ttyAMA0", 115200)
 ser.reset_input_buffer()
 sensor_buffer = []
