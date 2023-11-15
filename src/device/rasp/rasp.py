@@ -112,7 +112,7 @@ while True:
 		if(check_connection()):
 			
 			if(disconnected_flag):
-				read_log_send()
+				read_log_send(log_lock)
 			
 			print("online")
 			t_http = Thread(target=sendJSONhttp, args=(toSend, http_lock))
